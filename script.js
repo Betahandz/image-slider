@@ -1,65 +1,124 @@
-// elements
-const carousel = document.getElementById("carousel");
-const moveBtn = document.querySelectorAll(".btn");
+const carousel = document.querySelector(".carousel");
+const firtimage = document.querySelectorAll(".carousel img")[0];
+const point = document.querySelectorAll(".point");
 
-let drag = false;
+let width = firtimage.clientWidth + 14;
 
-// the different pictures to be displayed
-const images = [
-    "jellof.jpg",
-    "fried.jpg",
-    "tea.jpg",
-    "spaghetti.jpg",
-    "mobile-image-hero-1.jpg",
-    "mobile-image-hero-2.jpg",
-    "mobile-image-hero-3.jpg",
-]
+let isDragStart = false;
+let prevPageX;
+let prevScrollLeft;
 
-
-const displayImages = (collection) => {
-    display = collection.map(photos => {
-        return `
-        <img src="images/${photos}" alt="">
-        `
-    })
-    
-    carousel.innerHTML = display.join("");
-}// function to display images
-
-window.addEventListener("DOMContentLoaded", displayImages(images));
-
-const scrolling = (e) => {
-    if (drag == false) return;
-
-
-    let leftScroll = carousel.scrollLeft;
-    leftScroll -= e.movementX;
-    carousel.scrollLeft = leftScroll;
+// using the new way to write functions
+const dragging = (e) => {
+    if (!isDragStart) return;
+    e.preventDefault();
+    let positiondiff = e.pageX - prevPageX;
+    carousel.scrollLeft = prevScrollLeft - positiondiff;
 }
 
-carousel.addEventListener("mouseup", (e) => {
+const dragStart = (e) => {
+    isDragStart = true;
+    prevPageX = e.pageX;
+    prevScrollLeft = carousel.scrollLeft;
+}
+
+const dragStop = () => {
+    isDragStart = false;
+}
+
+
+carousel.addEventListener("mousedown", dragStart);
+carousel.addEventListener("mouseup", dragStop);
+carousel.addEventListener("mousemove", dragging);
+carousel.addEventListener("mousemove", dragging);
+
+carousel.addEventListener("touchmove", sliding);
+carousel.addEventListener("touchstart", slideon);
+carousel.addEventListener("touchend", slideoff);
+let num = 0;
+// using the old ways
+function sliding (e) {
+    if (!isDragStart) return;
     e.preventDefault();
-    drag = false;
-});
-
-carousel.addEventListener("mousedown", (e) => {
-    e.preventDefault();
-    drag = true;
-});
-
-carousel.addEventListener("mousemove", scrolling);
-
-moveBtn.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-        e.preventDefault();
-
-        let identity = e.currentTarget.classList;
-        
-        identity.contains ("right") ? carousel.scrollLeft -= 450: carousel.scrollLeft += 450;
-        
-        console.log(carousel.scrollLeft)
-    } )
-})
+    num = carousel.scrollLeft;
+    let pos = e.touches[0].pageX - prevPageX;
+    carousel.scrollLeft = prevScrollLeft - pos;
+    
+    if (e.touches[0].pageX++) {
+        num++;
+    }else {
+        num--;
+    }
+    console.log(width);
+    if (num >= width) {
+        point.forEach(item => {
+            item.classList.remove("active");
+            point[1].classList.add("active")
+        })
+    }
 
 
+    if (num >= width*2) {
+        point.forEach(item => {
+            item.classList.remove("active");
+            point[2].classList.add("active")
+        })
+    }
+
+    if (num >= width*3) {
+        point.forEach(item => {
+            item.classList.remove("active");
+            point[3].classList.add("active")
+        })
+    }
+
+    if (num >= width*4) {
+        point.forEach(item => {
+            item.classList.remove("active");
+            point[4].classList.add("active")
+        })
+    }
+    if (num >= width*5) {
+        point.forEach(item => {
+            item.classList.remove("active");
+            point[5].classList.add("active")
+        })
+    }
+    if (num >= width*6) {
+        point.forEach(item => {
+            item.classList.remove("active");
+            point[6].classList.add("active")
+        })
+    }
+    if (num >= width*7) {
+        point.forEach(item => {
+            item.classList.remove("active");
+            point[7].classList.add("active")
+        })
+    }
+    if (num >= width*8) {
+        point.forEach(item => {
+            item.classList.remove("active");
+            point[8].classList.add("active")
+        })
+    }
+    if (num < width) {
+        point.forEach(item => {
+            item.classList.remove("active");
+            point[0].classList.add("active")
+        })
+    }
+
+}
+
+// functio slide on
+function slideon (e) {
+    isDragStart = true;
+    prevPageX = e.touches[0].pageX;
+    prevScrollLeft = carousel.scrollLeft;
+}
+
+function slideoff () {
+    isDragStart = false;
+}
 
